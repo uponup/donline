@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>文档链接生成器</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="在线文件上传,文件生成URL,文件转链接">
+    </meta>
+    <link rel="stylesheet" href="https://unpkg.com/layui@2.6.8/dist/css/layui.css">
+    <script src="https://unpkg.com/layui@2.6.8/dist/layui.js"></script>
+    <script type="text/javascript"
+        src="http://www.jq22.com/demo/clipboard.js-master201703170013/dist/clipboard.min.js"></script>
+</head>
+
+<body>
+    <div class="layui-header layui-bg-cyan">
+        <div class="layui-container">
+            <a class="logo" href="/">
+                <img src="./images/logo.png" alt="docs_online" style="height: 30px;">
+                <span style="color: white;font-size: 17px;padding-left:12px">文档链接生成器</span>
+            </a>
+        </div>
+    </div>
+    <div class="layui-container ">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>拖拽上传</legend>
+        </fieldset>
+        <div class="layui-upload-drag" id="test10">
+            <i class="layui-icon"></i>
+            <p>点击上传，或将文件拖拽到此处</p>
+        </div>
+        <div class="layui-hide" id="uploadDemoView">
+            <div class="layui-form">
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="150">
+                        <col width="200">
+                        <col width="50">
+                        <col>
+                    </colgroup>
+                    <tr>
+                        <th>文件名</th>
+                        <th>链接</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="file_list"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="layui-footer footer footer_bottom">
+        <div class="layui-container">
+            <p>
+                © 2021
+                <a href="https://www.uponup.cn">uponup.com</a>
+                for 红燕Aria
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<style>
+    .logo {
+        position: absolute;
+        left: 0;
+        top: 16px;
+    }
+
+    .footer {
+        padding: 30px 0;
+        line-height: 30px;
+        text-align: center;
+        color: #666;
+        font-weight: 300;
+    }
+</style>
+
+<script>
+    layui.use(['upload', 'element', 'layer'], function () {
+        var $ = layui.jquery
+            , upload = layui.upload
+            , element = layui.element
+            , layer = layui.layer
+
+        //拖拽上传
+        upload.render({
+            elem: '#test10'
+            , url: './upload.php' //改成您自己的上传接口
+            , accept: 'file'
+            , done: function (res) {
+                console.log(res)
+                if (res.ret == 200) {
+                    layer.msg('上传成功');
+                    let html = innerHtml(res.data)
+                    layui.$('#uploadDemoView').removeClass('layui-hide').find('#file_list').append(html);
+                } else if (res.ret == 100) {
+                    layer.msg("上传文件为空");
+                } else if (res.ret == 101) {
+                    layer.msg("文件上传错误：" + res.data[0]);
+                }else if (res.ret == 102){
+                    layer.msg("上传文件超过最大限制：20M");
+                }else {
+                    layer.msg("上传失败");
+                }
+
+            }
+        });
+    })
+
+    function innerHtml(data) {
+        var html = '';
+        for (const index in data) {
+            let item = data[index];
+            html += `
+            <tr>
+                <td>${item.filename}</td>
+                <td>${item.url}</td>
+                <td>
+                    <button type="button" class="layui-btn" id="copy" onclick="copyUrlAction('${item.url}')">复制链接</button>
+                </td>
+            </tr>
+            `
+        }
+        return html;
+    }
+</script>
+
+<script>
+    function copyUrlAction(e) {
+        console.log(e);
+
+        let transfer = document.createElement('input');
+        document.body.appendChild(transfer);
+        transfer.value = e;  // 这里表示想要复制的内容
+        transfer.focus();
+        transfer.select();
+        if (document.execCommand('copy')) {
+            document.execCommand('copy');
+        }
+        transfer.blur();
+        layer.msg('复制成功');
+        document.body.removeChild(transfer);
+    }
+</script>
