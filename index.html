@@ -27,9 +27,9 @@
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
             <legend>拖拽上传</legend>
         </fieldset>
-        <div class="layui-upload-drag" id="test10">
+        <div class="layui-upload-drag" id="drag-file">
             <i class="layui-icon"></i>
-            <p>点击上传，或将文件拖拽到此处</p>
+            <p>点击上传，或将文件拖拽进浏览器</p>
         </div>
         <div class="layui-hide" id="uploadDemoView">
             <div class="layui-form">
@@ -89,7 +89,7 @@
 
         //拖拽上传
         upload.render({
-            elem: '#test10'
+            elem: '#drag-file'
             , url: './upload.php' //改成您自己的上传接口
             , accept: 'file'
             , done: function (res) {
@@ -102,12 +102,14 @@
                     layer.msg("上传文件为空");
                 } else if (res.ret == 101) {
                     layer.msg("文件上传错误：" + res.data[0]);
-                }else if (res.ret == 102){
+                } else if (res.ret == 102) {
                     layer.msg("上传文件超过最大限制：20M");
-                }else {
+                } else {
                     layer.msg("上传失败");
                 }
 
+            }, progress: function(n, elem, res, index) {
+                console.log(res);
             }
         });
     })
@@ -145,5 +147,10 @@
         transfer.blur();
         layer.msg('复制成功');
         document.body.removeChild(transfer);
+    }
+
+    function uploadAction(e) {
+        console.log('====');
+        layui.$('#anywhere-upload').addClass("border-box--show");
     }
 </script>
