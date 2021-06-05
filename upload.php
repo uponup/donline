@@ -41,6 +41,7 @@ function getExtension($filename)
 
 function response($ret, $data = [])
 {
+    header("Access-Control-Allow-Origin: *");
     echo json_encode([
         'ret' => $ret,
         'data' => $data
