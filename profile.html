@@ -68,15 +68,14 @@
     loadData();
     function loadData() {
         layui.$.ajax({
-            url: 'http://donline.uponup.cn/fetch.php',
+            url: './fetch.php',
             method: 'POST',
             data: {
                 'uid': -1,  //-1 超级用户
             },
             datatype: 'json',
-            success: function(res) {
-                console.log(res);
-                console.log(res.ret)
+            success: function(result) {
+                let res = JSON.parse(result);
                 if(res.ret == 200) {
                     innerHtml(res.data);
                 }else {
