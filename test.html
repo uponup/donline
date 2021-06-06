@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body id="body">
+    <div class="upload-box-p" id="uploadBoxArea">
+        <div class="upload-box-btn">
+            <div><label class="upload-box-desc">您也可以拖拽文件到虚线框中进行转换</label></div> <span>
+                <button type="button" data-titleback="false" id="plupload-avatar"
+                    class="btn btn-success btn-lg plupload" data-input-id="c-avatar"
+                    data-mimetype="application/octet-stream" data-multiple="false" data-preview-id="p-avatar">
+                    <i class="fa fa-upload"></i> 点此上传word文件
+                </button>
+            </span>
+        </div>
+    </div>
+    <div style="height:100%;">12</div>
+</body>
+<style>
+    .upload-box {
+        height: 300px;
+        background: #eee;
+        padding: 10px;
+    }
+
+    .upload-box-p .plupload-preview {
+        flex-wrap: wrap;
+        /*height:60%;*/
+        list-style: none;
+        display: none;
+    }
+
+    .upload-box-p {
+        border: 1px dashed #ada2a2;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .upload-box-desc {
+        color: #888;
+        font-size: 2em;
+    }
+</style>
+
+<script>
+    //添加拖拽事件 
+    var dz = document.getElementById('body');
+    dz.ondragover = function (ev) {
+        //阻止浏览器默认打开文件的操作  
+        ev.preventDefault();
+        //拖入文件后边框颜色变红  
+        this.style.borderColor = 'red';
+    }
+    dz.ondragleave = function () {
+        //恢复边框颜色  
+        this.style.borderColor = 'gray';
+    }
+    dz.ondrop = function (ev) {
+        //恢复边框颜色  
+        this.style.borderColor = 'gray';
+        //阻止浏览器默认打开文件的操作  
+        ev.preventDefault();
+        var files = ev.dataTransfer.files;
+        if (files.length > 0) {
+            //fastadmin框架调用的真实文件上传方法，对应改成你自己的逻辑 
+            console.log('上床文见')
+        }
+    }
+</script>
+
+</html>

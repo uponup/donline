@@ -7,12 +7,10 @@ $temp_path = $_FILES['file']['tmp_name'];
 $temp_name = $_FILES['file']['name'];
 $temp_size = $_FILES['file']['size'];
 $temp_error = $_FILES['file']['error'];
+$temp_type = $_FILES['file']['type'];
 
 if ($temp_error != 0) return response(101, [$temp_error]);
 
-// echo json_encode($_FILES);
-
-// return;
 // 超过最大限制
 if ($temp_size > 20000000) return response(102);
 
@@ -30,6 +28,12 @@ $data = [
         "url" => "$domain/$relative_path"
     ]
 ];
+
+// 将记录插入数据库
+$sql = "INSERT INTO files SET name = '$filename', type = '$temp_type', size = $temp_size, path = '/$relative_path'";
+$pdo = getPDO();
+$pdo->exec($sql);
+
 return response(200, $data);
 
 function getExtension($filename)
@@ -46,5 +50,14 @@ function response($ret, $data = [])
         'ret' => $ret,
         'data' => $data
     ]);
+}
+
+function getPDO() {
+    try {
+        $pdo = new PDO("mysql:host='localhost';dbname='donline'", 'donline', 'donline@1407');
+        return $pdo;
+    }catch (PDOException $e) {
+        echo("数据库链接失败" . $e->getMessage());
+    }
 }
 return;

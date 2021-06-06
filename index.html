@@ -7,81 +7,157 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="在线文件上传,文件生成URL,文件转链接">
-    </meta>
     <link rel="stylesheet" href="https://unpkg.com/layui@2.6.8/dist/css/layui.css">
     <script src="https://unpkg.com/layui@2.6.8/dist/layui.js"></script>
-    <script type="text/javascript"
-        src="http://www.jq22.com/demo/clipboard.js-master201703170013/dist/clipboard.min.js"></script>
 </head>
 
 <body>
-    <div class="layui-header layui-bg-cyan">
-        <div class="layui-container">
+    <div class="layui-header layui-nav layui-bg-cyan header" style="opacity:0.85">
+        <li class="layui-nav-item logo-container">
             <a class="logo" href="/">
                 <img src="./images/logo.png" alt="docs_online" style="height: 30px;">
                 <span style="color: white;font-size: 17px;padding-left:12px">文档链接生成器</span>
             </a>
-        </div>
+        </li>
+        <li class="layui-nav-item" lay-unselect="">
+            <a href="./profile.html"><img src="http://files.uponup.cn/avatar/IMG_1311.JPG" class="layui-nav-img"></a>
+            <dl class="layui-nav-child">
+                <dd><a href="./profile.html">你的文件</a></dd>
+                <hr>
+                <dd style="text-align: center;"><a href="">退出</a></dd>
+            </dl>
+        </li>
     </div>
 
-    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-        <legend>高级应用：制作一个多文件列表</legend>
-    </fieldset>
+    <style>
+        #anywhere-upload {
+            z-index: 1000;
+            width: 100%;
+            transition: tranform 300ms ease, -webkit-transform 300ms ease;
+        }
 
-    <div class="layui-upload">
-        <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
-        <div class="layui-upload-list" style="max-width: 1000px;">
-            <table class="layui-table">
-                <colgroup>
-                    <col>
-                    <col width="150">
-                    <col width="260">
-                    <col width="150">
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th>文件名</th>
-                        <th>大小</th>
-                        <th>上传进度</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody id="demoList"></tbody>
-            </table>
-        </div>
-        <button type="button" class="layui-btn" id="testListAction">开始上传</button>
-    </div>
+        .upload-box {
+            border-bottom: 0;
+        }
 
+        .upload-box--fixed {
+            position: fixed;
+            left: 0;
+            right: 0;
+            background: #fff;
+        }
 
-    <div class="layui-container ">
-        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-            <legend>拖拽上传</legend>
-        </fieldset>
-        <div class="layui-upload-drag" id="drag-file">
-            <i class="layui-icon"></i>
-            <p>点击上传，或将文件拖拽进浏览器</p>
-        </div>
-        <div class="layui-hide" id="uploadDemoView">
-            <div class="layui-form">
-                <table class="layui-table">
-                    <colgroup>
-                        <col width="150">
-                        <col width="200">
-                        <col width="50">
-                        <col>
-                    </colgroup>
-                    <tr>
-                        <th>文件名</th>
-                        <th>链接</th>
-                        <th>操作</th>
-                    </tr>
-                    </thead>
-                    <tbody id="file_list"></tbody>
-                </table>
+        .upload-box--hidden {
+            transform: translateY(-100%);
+            top: 0;
+        }
+
+        .upload-box--show {
+            transform: translateY(0);
+        }
+
+        .popup {
+            /* background-color: #eeeeee; */
+            /* height: 50%; */
+            padding-bottom: 24px;
+        }
+
+        .popup-info {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 34px;
+        }
+
+        .popup-panel {
+            display: flex;
+            justify-content: center;
+            position: relative !important;
+        }
+
+        .popup-panel-item {
+            margin: 46px auto 12px;
+            width: 32%;
+        }
+
+        .item-row {
+            color: #666;
+        }
+
+        .item-row span {
+            color: #333;
+        }
+
+        #uploadDemoView {
+            margin: 0;
+            height: 100%;
+        }
+    </style>
+    <div id="anywhere-upload" class="upload-box upload-box--fixed upload-box--hidden">
+        <div class="layui-form popup">
+            <div class="popup-info">
+                <div>上传文件最大不超过20M</div>
+                <button class="popup-btn-close" onclick="btnCloseAction()">关闭</button>
+            </div>
+            <div class="layui-row layui-col-space15 popup-panel">
+                <div class="layui-col-md6 popup-panel-item">
+                    <div class="layui-panel">
+                        <div style="padding: 30px;" id="pannel-fileitem">
+                        </div>
+                        <div class="layui-progress" lay-showpercent="true" lay-filter="pannel-progress">
+                            <div class="layui-progress-bar layui-bg-green" lay-percent="0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-hide" id="uploadDemoView">
+                <div class="layui-form">
+                    <table class="layui-table">
+                        <colgroup>
+                            <col width="150">
+                            <col width="200">
+                            <col width="50">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>文件名</th>
+                                <th>链接</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="file_list">
+
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-    <div class="layui-footer footer footer_bottom">
+    <div class="layui-upload comtainer-upload">
+        <button type="button" class="layui-btn layui-bg-orange" id="btn_upload">上传图片</button>
+    </div>
+    <div class="layui-carousel banner" id="test10">
+        <div carousel-item="">
+            <div class="banner-item"><img class="banner-item-img"
+                    src="https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Desert_Beauty_Christoph_Fischer.jpg">
+            </div>
+            <div class="banner-item"><img class="banner-item-img"
+                    src="https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Happy_Birthday_Adam_Iwona_Podlasinska.jpg">
+            </div>
+            <div class="banner-item"><img class="banner-item-img"
+                    src="https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Catwalk_am_Bahnhof_Zurich_Oerlikon_Peter_Arn.jpg">
+            </div>
+            <div class="banner-item"><img class="banner-item-img"
+                    src="https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Tree_and_Morning_Mist_Jos_Buurmans.jpg">
+            </div>
+            <div class="banner-item"><img class="banner-item-img"
+                    src="https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Dawn_of_Another_Day_Sky_Matthews.jpg">
+            </div>
+            <div class="banner-item"><img class="banner-item-img"
+                    src="https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/If_Only_We_Could_Turn_Back_Time_Anna_Kwa.jpg">
+            </div>
+        </div>
+    </div>
+    <div class="footer footer_bottom">
         <div class="layui-container">
             <p>
                 © 2021
@@ -95,18 +171,74 @@
 </html>
 
 <style>
+    .logo-container {
+        white-space: nowrap;
+    }
+
     .logo {
-        position: absolute;
         left: 0;
         top: 16px;
+    }
+
+    .header {
+        justify-content: space-between;
+        display: flex;
     }
 
     .footer {
         padding: 30px 0;
         line-height: 30px;
         text-align: center;
-        color: #666;
         font-weight: 300;
+        bottom: 0;
+        position: absolute;
+        width: 100%;
+        text-decoration: none;
+        color: white;
+    }
+
+    a {
+        color: white;
+        -webkit-tap-highlight-color: #009688;
+    }
+
+    .banner {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    .banner-item {
+        display: table-cell;
+        vertical-align: middle;
+        width: 100%;
+        height: 100%;
+        line-height: 100%;
+        text-align: center;
+    }
+
+    .banner-item-img {
+        width: 100%;
+        vertical-align: middle;
+        margin: 0 auto;
+    }
+
+    .layui-carousel-ind {
+        top: -99px;
+    }
+
+    .comtainer-upload {
+        width: 100%;
+        position: absolute;
+        top: 56%;
+        display: flex;
+        justify-content: center;
+        z-index: 99;
+        opacity: 0.68;
     }
 </style>
 
@@ -117,95 +249,38 @@
             , element = layui.element
             , layer = layui.layer
 
-        //拖拽上传
         upload.render({
-            elem: '#drag-file'
-            , url: './upload.php' //改成您自己的上传接口
-            , accept: 'file'
-            , done: function (res) {
-                console.log(res)
-                if (res.ret == 200) {
-                    layer.msg('上传成功');
-                    let html = innerHtml(res.data)
-                    layui.$('#uploadDemoView').removeClass('layui-hide').find('#file_list').append(html);
-                } else if (res.ret == 100) {
-                    layer.msg("上传文件为空");
-                } else if (res.ret == 101) {
-                    layer.msg("文件上传错误：" + res.data[0]);
-                } else if (res.ret == 102) {
-                    layer.msg("上传文件超过最大限制：20M");
-                } else {
-                    layer.msg("上传失败");
-                }
-
+            elem: "#btn_upload",
+            url: "./upload.php",
+            accept: "file",
+            before: function (obj) {
+                // 弹出我自己的弹窗
+                console.log('即将上传')
+                console.log(obj);
+                let html = `
+                    <div class="item-row">文件名：<span>${obj.filename}</span></div>
+                    <div class="item-row">文件大小：<span>${obj.filename}</span></div>
+                    <div class="item-row">文件类型：<span>${obj.type}</span></div>
+                `;
+                layui.$('#pannel-fileitem').html(html);
+                layui.$('#anywhere-upload').addClass('upload-box--show');
+            },
+            done: function (res) {
+                // 上传结果
+                let html = innerHtml(res.data)
+                layui.$('#uploadDemoView').removeClass('layui-hide').find('#file_list').append(html);
+            },
+            progress: function (n, elem, res, index) {
+                var percent = n + '%' //获取进度百分比
+                element.progress('pannel-progress', percent); //可配合 layui 进度条元素使用
+                console.log(elem); //得到当前触发的元素 DOM 对象。可通过该元素定义的属性值匹配到对应的进度条。
+                console.log(res); //得到 progress 响应信息
+                console.log(index); //得到当前上传文件的索引，多文件上传时的进度条控制，如：
+            },
+            error: function () {
+                // 上传失败
             }
-        });
-
-        //演示多文件列表
-        var uploadListIns = upload.render({
-            elem: '#testList'
-            , elemList: $('#demoList') //列表元素对象
-            , url: 'http://donline.uponup.cn/upload.php'
-            , accept: 'file'
-            , multiple: true
-            , number: 3
-            , auto: false
-            , bindAction: '#testListAction'
-            , choose: function (obj) {
-                var that = this;
-                var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
-                //读取本地文件
-                obj.preview(function (index, file, result) {
-                    var tr = $(['<tr id="upload-' + index + '">'
-                        , '<td>' + file.name + '</td>'
-                        , '<td>' + (file.size / 1014).toFixed(1) + 'kb</td>'
-                        , '<td><div class="layui-progress" lay-filter="progress-demo-' + index + '"><div class="layui-progress-bar" lay-percent=""></div></div></td>'
-                        , '<td>'
-                        , '<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
-                        , '<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
-                        , '</td>'
-                        , '</tr>'].join(''));
-
-                    //单个重传
-                    tr.find('.demo-reload').on('click', function () {
-                        obj.upload(index, file);
-                    });
-
-                    //删除
-                    tr.find('.demo-delete').on('click', function () {
-                        delete files[index]; //删除对应的文件
-                        tr.remove();
-                        uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
-                    });
-
-                    that.elemList.append(tr);
-                    element.render('progress'); //渲染新加的进度条组件
-                });
-            }
-            , done: function (res, index, upload) { //成功的回调
-                var that = this;
-                //if(res.code == 0){ //上传成功
-                var tr = that.elemList.find('tr#upload-' + index)
-                    , tds = tr.children();
-                tds.eq(3).html(''); //清空操作
-                delete this.files[index]; //删除文件队列已经上传成功的文件
-                return;
-                //}
-                this.error(index, upload);
-            }
-            , allDone: function (obj) { //多文件上传完毕后的状态回调
-                console.log(obj)
-            }
-            , error: function (index, upload) { //错误回调
-                var that = this;
-                var tr = that.elemList.find('tr#upload-' + index)
-                    , tds = tr.children();
-                tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
-            }
-            , progress: function (n, elem, e, index) { //注意：index 参数为 layui 2.6.6 新增
-                element.progress('progress-demo-' + index, n + '%'); //执行进度条。n 即为返回的进度百分比
-            }
-        });
+        })
     })
 
     function innerHtml(data) {
@@ -224,12 +299,32 @@
         }
         return html;
     }
+
+    layui.use(['carousel', 'form'], function () {
+        var carousel = layui.carousel
+            , form = layui.form;
+        //图片轮播
+        carousel.render({
+            elem: '#test10'
+            , width: '778px'
+            , height: '440px'
+            , interval: 5000
+        });
+
+        //事件
+        carousel.on('change(test4)', function (res) {
+            console.log(res)
+        });
+    });
+
+
 </script>
 
 <script>
     function copyUrlAction(e) {
-        console.log(e);
+        console.log("复制");
 
+        return
         let transfer = document.createElement('input');
         document.body.appendChild(transfer);
         transfer.value = e;  // 这里表示想要复制的内容
@@ -243,8 +338,7 @@
         document.body.removeChild(transfer);
     }
 
-    function uploadAction(e) {
-        console.log('====');
-        layui.$('#anywhere-upload').addClass("border-box--show");
+    function btnCloseAction() {
+        layui.$('#anywhere-upload').removeClass('upload-box--show');
     }
 </script>
