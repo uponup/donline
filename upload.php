@@ -9,7 +9,7 @@ $temp_size = $_FILES['file']['size'];
 $temp_error = $_FILES['file']['error'];
 $temp_type = $_FILES['file']['type'];
 
-if ($temp_error == 0) return response(100);
+if ($temp_size == 0) return response(100);
 if ($temp_error != 0) return response(101, [$temp_error]);
 
 // 超过最大限制
