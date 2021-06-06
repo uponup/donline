@@ -96,15 +96,8 @@
 </html>
 
 <script>
-    loadData();
     function loadData() {
-        let items = [
-            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Dawn_of_Another_Day_Sky_Matthews.jpg",
-            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Tree_and_Morning_Mist_Jos_Buurmans.jpg",
-            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Catwalk_am_Bahnhof_Zurich_Oerlikon_Peter_Arn.jpg",
-            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Happy_Birthday_Adam_Iwona_Podlasinska.jpg",
-            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Desert_Beauty_Christoph_Fischer.jpg"
-        ];
+        let items = bgurls();
         for (const index in items) {
             let url = items[index];
             let html = `
@@ -324,4 +317,50 @@
         }
         return html;
     }
+
+    function bgurls() {
+        let urls = [
+            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Secluded_Pete_Rowbottom.jpg",
+            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Fantasy_Island_Daniel_Cheong.jpg",
+            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/A_Time_of_Change_Rachel_Brokaw.jpg",
+            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Happy_Birthday_Adam_Iwona_Podlasinska.jpg",
+            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Untitled_Jorge_Guadalupe_Lizarraga.jpg",
+            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Cool_Power_commended-LPOTY_UK_Steve_Cole.jpg",
+            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/sunset_1663_Junji_Aoyama.jpg",
+            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/If_Only_We_Could_Turn_Back_Time_Anna_Kwa.jpg",
+            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Pierre_Gely-Fort_The_Dark_Love_Boat.jpg",
+            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Mists_of_renfrew_Adam_Gibbs.jpg",
+            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Catwalk_am_Bahnhof_Zurich_Oerlikon_Peter_Arn.jpg",
+            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/benito_druck.jpg",
+            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Dawn_of_Another_Day_Sky_Matthews.jpg",
+            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Tree_and_Morning_Mist_Jos_Buurmans.jpg",
+            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Europes_best_View_Fabian_Fortmann.jpg"
+        ];
+
+        let arr = shuffle(urls);
+        console.log(arr)
+        console.log(arr.slice(0, 5))
+        return arr.slice(0, 5);
+    }
+
+    function shuffle(array) {
+        var currentIndex = array.length, randomIndex;
+
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+
+            // Pick a remaining element...
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+
+            // And swap it with the current element.
+            [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex], array[currentIndex]];
+        }
+        return array;
+    }
+</script>
+
+<script>
+    loadData();
 </script>
