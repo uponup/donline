@@ -156,7 +156,9 @@
                     return
                 }
                 
+                // 重置
                 element.progress('pannel-progress', '0%');
+                btnCloseAction();
                 if (res.ret == 100) {
                     layer.msg("☆芞人☆，哼～不要拿空文件調戲我ぷ");
                 } else if (res.ret == 101) {
