@@ -49,131 +49,11 @@
                             <th>文件名</th>
                             <th>上传时间</th>
                             <th>状态</th>
-                            <th>操作</th>
+                            <th>外链</th>
                         </tr>
                     </thead>
                     <tbody id="files_list">
-                        <tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr><tr>
-                            <td>文件名</td>
-                            <td>上传时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                        </tr>
+                        
                     </tbody>
                 </table>
             </div>
@@ -181,6 +61,40 @@
     </div>
     
 </body>
+
+<script>
+    loadData();
+    function loadData() {
+        layui.$.ajax({
+            url: './fetch.php',
+            success: function(res) {
+                console.log(res);
+                if(res.ret == 200) {
+                    innerHtml(res.data);
+                }else {
+                    layui.msg("获取失败");
+                }
+            }
+        })
+    }
+
+    function innerHtml($items) {
+        var html = "";
+        for (const index in items) {
+            let file = items[index];
+            var state = file.state == "3" ? "过期｜已删除" : "可访问"
+            html += `
+                <tr id="file_${file.id}">
+                    <td>${file.name}</td>
+                    <td>${file.date_created}</td>
+                    <td>${state}</td>
+                    <td>${file.url}</td>
+                </tr>
+            `;
+        }
+        layui.$("#files_list").append(html);
+    }
+</script>
 
 <style>
     .profile img {
