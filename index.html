@@ -152,7 +152,12 @@
                     let html = innerHtml(res.data)
                     layui.$('#uploadDemoView').removeClass('layui-hide').find('#file_list').append(html);
                     layer.msg('biu～ 上传成功');
-                } else if (res.ret == 100) {
+
+                    return
+                }
+                
+                element.progress('pannel-progress', '0%');
+                if (res.ret == 100) {
                     layer.msg("☆芞人☆，哼～不要拿空文件調戲我ぷ");
                 } else if (res.ret == 101) {
                     layer.msg("哎呀，服务器接受文件遇到错误：" + res.data[0]);
