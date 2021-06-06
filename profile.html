@@ -69,6 +69,11 @@
     function loadData() {
         layui.$.ajax({
             url: './fetch.php',
+            method: 'POST',
+            data: {
+                'uid': 1,
+            },
+            datatype: 'json',
             success: function(res) {
                 console.log(res);
                 if(res.ret == 200) {
