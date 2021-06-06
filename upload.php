@@ -32,10 +32,6 @@ $data = [
 // 将记录插入数据库
 $sql = "INSERT INTO files SET name = '$filename', type = '$temp_type', size = $temp_size, path = '/$relative_path'";
 
-echo $sql;
-
-return;
-
 $pdo = getPDO();
 $pdo->exec($sql);
 
