@@ -149,9 +149,9 @@
             done: function (res) {
                 // 上传结果
                 if (res.ret == 200) {
-                    layer.msg('biu～ 上传成功');
                     let html = innerHtml(res.data)
                     layui.$('#uploadDemoView').removeClass('layui-hide').find('#file_list').append(html);
+                    layer.msg('biu～ 上传成功');
                 } else if (res.ret == 100) {
                     layer.msg("☆芞人☆，哼～不要拿空文件調戲我ぷ");
                 } else if (res.ret == 101) {
@@ -168,7 +168,6 @@
             */
             progress: function (n, elem, res, index) {
                 element.progress('pannel-progress', n + '%');
-                console.log(percent);
             },
             error: function (e) {
                 // 上传失败
