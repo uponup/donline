@@ -2,10 +2,8 @@
 
 $uid = $_POST['uid'];
 
-echo $uid;
-return
 $pdo = getPDO();
-$sql = "SELECT files WHERE state <> 2 AND upload_by = $uid";
+$sql = "SELECT *FROM files WHERE state <> 2 AND upload_by = $uid";
 $res = $pdo->query($sql, PDO::FETCH_ASSOC)->fetchAll();
 $res = array_map(function($file) {
     unset($file['upload_by']);
