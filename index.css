@@ -1,0 +1,158 @@
+.logo-container {
+    white-space: nowrap;
+}
+
+.logo {
+    left: 0;
+    top: 16px;
+}
+
+.header {
+    justify-content: space-between;
+    display: flex;
+}
+
+.footer {
+    padding: 30px 0;
+    line-height: 30px;
+    text-align: center;
+    font-weight: 300;
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+    text-decoration: none;
+    color: white;
+}
+
+a {
+    color: white;
+    -webkit-tap-highlight-color: #009688;
+}
+
+.banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.banner-item {
+    display: table-cell;
+    vertical-align: middle;
+    width: 100%;
+    height: 100%;
+    line-height: 100%;
+    text-align: center;
+}
+
+.banner-item-img {
+    width: 100%;
+    vertical-align: middle;
+    margin: 0 auto;
+}
+
+.layui-carousel-ind {
+    top: -99px;
+}
+
+.comtainer-upload {
+    width: 100%;
+    position: absolute;
+    top: 56%;
+    display: flex;
+    justify-content: center;
+    z-index: 99;
+    opacity: 0.68;
+}
+
+/**
+    上传
+*/
+#anywhere-upload {
+    z-index: 1000;
+    width: 100%;
+    transition: tranform 300ms ease, -webkit-transform 300ms ease;
+}
+
+.upload-box {
+    border-bottom: 0;
+}
+
+.upload-box--fixed {
+    position: fixed;
+    left: 0;
+    right: 0;
+    background: #fff;
+}
+
+.upload-box--hidden {
+    transform: translateY(-100%);
+    top: 0;
+}
+
+.upload-box--show {
+    transform: translateY(0);
+}
+
+.popup {
+    /* background-color: #eeeeee; */
+    /* height: 50%; */
+    padding-bottom: 24px;
+}
+
+.popup-info {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 34px;
+}
+
+.popup-panel {
+    display: flex;
+    justify-content: center;
+    position: relative !important;
+}
+
+.popup-panel-item {
+    margin: 46px auto 12px;
+    width: 32%;
+}
+
+.item-row {
+    color: #666;
+}
+
+.item-row span {
+    color: #333;
+}
+
+#uploadDemoView {
+    margin: 0;
+    height: 100%;
+}
+
+.popup-info-left {
+    line-height: 20px;
+    color: #999;
+    font-size: 11px;
+}
+
+.popup-info-left span {
+    vertical-align: middle;
+}
+
+.popup-info-left i {
+    vertical-align: middle;
+    color:#FF5722;
+}
+
+.popup-info button {
+    background-color: #fff;
+    border: 0;
+}
+
+.popup-info button i{
+    vertical-align: middle;
+}

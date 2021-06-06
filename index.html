@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="在线文件上传,文件生成URL,文件转链接">
     <link rel="stylesheet" href="https://unpkg.com/layui@2.6.8/dist/css/layui.css">
+    <link rel="stylesheet" href="./index.css">
     <script src="https://unpkg.com/layui@2.6.8/dist/layui.js"></script>
 </head>
 
@@ -28,75 +29,18 @@
             </dl>
         </li>
     </div>
-
-    <style>
-        #anywhere-upload {
-            z-index: 1000;
-            width: 100%;
-            transition: tranform 300ms ease, -webkit-transform 300ms ease;
-        }
-
-        .upload-box {
-            border-bottom: 0;
-        }
-
-        .upload-box--fixed {
-            position: fixed;
-            left: 0;
-            right: 0;
-            background: #fff;
-        }
-
-        .upload-box--hidden {
-            transform: translateY(-100%);
-            top: 0;
-        }
-
-        .upload-box--show {
-            transform: translateY(0);
-        }
-
-        .popup {
-            /* background-color: #eeeeee; */
-            /* height: 50%; */
-            padding-bottom: 24px;
-        }
-
-        .popup-info {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 34px;
-        }
-
-        .popup-panel {
-            display: flex;
-            justify-content: center;
-            position: relative !important;
-        }
-
-        .popup-panel-item {
-            margin: 46px auto 12px;
-            width: 32%;
-        }
-
-        .item-row {
-            color: #666;
-        }
-
-        .item-row span {
-            color: #333;
-        }
-
-        #uploadDemoView {
-            margin: 0;
-            height: 100%;
-        }
-    </style>
     <div id="anywhere-upload" class="upload-box upload-box--fixed upload-box--hidden">
         <div class="layui-form popup">
             <div class="popup-info">
-                <div>上传文件最大不超过20M</div>
-                <button class="popup-btn-close" onclick="btnCloseAction()">关闭</button>
+                <div class="popup-info-left">
+                    <i class="layui-icon layui-icon-tips"></i>
+                    <span>上传文件最大不超过</span>
+                    <span>20M</span>
+                </div>
+                <button onclick="btnCloseAction()">
+                    <i class="layui-icon layui-icon-close"></i>
+                    关闭
+                </button>
             </div>
             <div class="layui-row layui-col-space15 popup-panel">
                 <div class="layui-col-md6 popup-panel-item">
@@ -118,7 +62,7 @@
                             <col width="50">
                         </colgroup>
                         <thead>
-                            <tr>
+                            <tr class="layui-bg-green">
                                 <th>文件名</th>
                                 <th>链接</th>
                                 <th>操作</th>
@@ -136,25 +80,8 @@
         <button type="button" class="layui-btn layui-bg-orange" id="btn_upload">上传图片</button>
     </div>
     <div class="layui-carousel banner" id="test10">
-        <div carousel-item="">
-            <div class="banner-item"><img class="banner-item-img"
-                    src="https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Desert_Beauty_Christoph_Fischer.jpg">
-            </div>
-            <div class="banner-item"><img class="banner-item-img"
-                    src="https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Happy_Birthday_Adam_Iwona_Podlasinska.jpg">
-            </div>
-            <div class="banner-item"><img class="banner-item-img"
-                    src="https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Catwalk_am_Bahnhof_Zurich_Oerlikon_Peter_Arn.jpg">
-            </div>
-            <div class="banner-item"><img class="banner-item-img"
-                    src="https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Tree_and_Morning_Mist_Jos_Buurmans.jpg">
-            </div>
-            <div class="banner-item"><img class="banner-item-img"
-                    src="https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Dawn_of_Another_Day_Sky_Matthews.jpg">
-            </div>
-            <div class="banner-item"><img class="banner-item-img"
-                    src="https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/If_Only_We_Could_Turn_Back_Time_Anna_Kwa.jpg">
-            </div>
+        <div carousel-item="" id="banner-container">
+
         </div>
     </div>
     <div class="footer footer_bottom">
@@ -170,79 +97,27 @@
 
 </html>
 
-<style>
-    .logo-container {
-        white-space: nowrap;
-    }
-
-    .logo {
-        left: 0;
-        top: 16px;
-    }
-
-    .header {
-        justify-content: space-between;
-        display: flex;
-    }
-
-    .footer {
-        padding: 30px 0;
-        line-height: 30px;
-        text-align: center;
-        font-weight: 300;
-        bottom: 0;
-        position: absolute;
-        width: 100%;
-        text-decoration: none;
-        color: white;
-    }
-
-    a {
-        color: white;
-        -webkit-tap-highlight-color: #009688;
-    }
-
-    .banner {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        width: 100% !important;
-        height: 100% !important;
-    }
-
-    .banner-item {
-        display: table-cell;
-        vertical-align: middle;
-        width: 100%;
-        height: 100%;
-        line-height: 100%;
-        text-align: center;
-    }
-
-    .banner-item-img {
-        width: 100%;
-        vertical-align: middle;
-        margin: 0 auto;
-    }
-
-    .layui-carousel-ind {
-        top: -99px;
-    }
-
-    .comtainer-upload {
-        width: 100%;
-        position: absolute;
-        top: 56%;
-        display: flex;
-        justify-content: center;
-        z-index: 99;
-        opacity: 0.68;
-    }
-</style>
-
 <script>
+    loadData();
+    function loadData() {
+        let items = [
+            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Dawn_of_Another_Day_Sky_Matthews.jpg",
+            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Tree_and_Morning_Mist_Jos_Buurmans.jpg",
+            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Catwalk_am_Bahnhof_Zurich_Oerlikon_Peter_Arn.jpg",
+            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Happy_Birthday_Adam_Iwona_Podlasinska.jpg",
+            "https://combo.staticflickr.com/ap/build/images/sohp/2020-top-25/Desert_Beauty_Christoph_Fischer.jpg"
+        ];
+        for (const index in items) {
+            let url = items[index];
+            let html = `
+            <div class="banner-item">
+                <img class="banner-item-img" src="${url}">
+            </div>
+            `;
+            layui.$('#banner-container').append(html);
+        }
+    }
+
     layui.use(['upload', 'element', 'layer'], function () {
         var $ = layui.jquery
             , upload = layui.upload
@@ -254,6 +129,10 @@
             url: "./upload.php",
             accept: "file",
             choose: function (obj) {
+                //选中一个的时候，将进度清零
+                element.progress('pannel-progress', '0%');
+            },
+            before: function (obj) {
                 obj.preview(function (index, file, result) {
                     let ymd = getNowFormatDate(file.lastModified);
                     let size = (file.size / 1000 / 1000).toFixed(2);
@@ -277,7 +156,7 @@
              * 得到 progress 响应信息
             */
             progress: function (n, elem, res, index) {
-                element.progress('pannel-progress', n + '%'); 
+                element.progress('pannel-progress', n + '%');
                 console.log(percent);
             },
             error: function (e) {
@@ -286,23 +165,6 @@
             }
         })
     })
-
-    function innerHtml(data) {
-        var html = '';
-        for (const index in data) {
-            let item = data[index];
-            html += `
-            <tr>
-                <td>${item.filename}</td>
-                <td>${item.url}</td>
-                <td>
-                    <button type="button" class="layui-btn" id="copy" onclick="copyUrlAction('${item.url}')">复制链接</button>
-                </td>
-            </tr>
-            `
-        }
-        return html;
-    }
 
     layui.use(['carousel', 'form'], function () {
         var carousel = layui.carousel
@@ -320,28 +182,11 @@
             console.log(res)
         });
     });
-
-    function getNowFormatDate(timestamp) {
-        let date = new Date(timestamp)
-        let Y = date.getFullYear() + '-';
-        let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
-        let D = date.getDate() + ' ';
-        let h = date.getHours() + ':';
-        let m = date.getMinutes() + ':';
-        let s = date.getSeconds();
-
-        let currentdate = Y + M + D + h + m + s;
-        return currentdate;
-    }
-
-
 </script>
 
+<!-- 点击事件 -->
 <script>
     function copyUrlAction(e) {
-        console.log("复制");
-
-        return
         let transfer = document.createElement('input');
         document.body.appendChild(transfer);
         transfer.value = e;  // 这里表示想要复制的内容
@@ -357,5 +202,39 @@
 
     function btnCloseAction() {
         layui.$('#anywhere-upload').removeClass('upload-box--show');
+    }
+</script>
+
+<!-- 私有方法 -->
+<script>
+    function getNowFormatDate(timestamp) {
+        let date = new Date(timestamp)
+        let Y = date.getFullYear() + '-';
+        let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+        let D = date.getDate() + ' ';
+        let h = date.getHours() + ':';
+        let m = date.getMinutes() + ':';
+        let s = date.getSeconds();
+
+        let currentdate = Y + M + D + h + m + s;
+        return currentdate;
+    }
+
+
+    function innerHtml(data) {
+        var html = '';
+        for (const index in data) {
+            let item = data[index];
+            html += `
+            <tr>
+                <td>${item.filename}</td>
+                <td>${item.url}</td>
+                <td>
+                    <button type="button" class="layui-btn" id="copy" onclick="copyUrlAction('${item.url}')">复制链接</button>
+                </td>
+            </tr>
+            `
+        }
+        return html;
     }
 </script>
