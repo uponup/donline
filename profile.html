@@ -39,7 +39,7 @@
     <div class="layui-row layui-col-space15 table">
         <div class="layui-panel">
             <div class="layui-form">
-                <table class="layui-table">
+                <table class="layui-table layui-hide" id="table">
                     <colgroup>
                         <col width="150">
                         <col width="150">
@@ -85,7 +85,13 @@
         })
     }
 
-    function innerHtml($items) {
+    function innerHtml(items) {
+        if (items.length == 0) {
+            layui.$('#table').parent().html('<span style="padding: 0px 13px;">没有查到记录</span>')
+            return
+        }
+
+        layui.$('#table').removeClass("layui-hide");
         var html = "";
         for (const index in items) {
             let file = items[index];
