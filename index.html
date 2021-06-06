@@ -77,12 +77,10 @@
         </div>
     </div>
     <div class="layui-upload comtainer-upload">
-        <button type="button" class="layui-btn layui-bg-orange" id="btn_upload">上传图片</button>
+        <button type="button" class="layui-btn layui-bg-orange" id="btn_upload">上传文档</button>
     </div>
-    <div class="layui-carousel banner" id="test10">
-        <div carousel-item="" id="banner-container">
-
-        </div>
+    <div class="layui-carousel banner" id="mybanner">
+        <div carousel-item="" id="banner-container"></div>
     </div>
     <div class="footer footer_bottom">
         <div class="layui-container">
@@ -147,27 +145,7 @@
                 })
             },
             done: function (res) {
-                // 上传结果
-                if (res.ret == 200) {
-                    let html = innerHtml(res.data)
-                    layui.$('#uploadDemoView').removeClass('layui-hide').find('#file_list').append(html);
-                    layer.msg('biu～ 上传成功');
-
-                    return
-                }
-                
-                // 重置
-                element.progress('pannel-progress', '0%');
-                btnCloseAction();
-                if (res.ret == 100) {
-                    layer.msg("☆芞人☆，哼～不要拿空文件調戲我ぷ");
-                } else if (res.ret == 101) {
-                    layer.msg("哎呀，服务器接受文件遇到错误：" + res.data[0]);
-                } else if (res.ret == 102) {
-                    layer.msg("﹌文件太大啦の，服务器GieGie的 ❤️ 只能装20M");
-                } else {
-                    layer.msg("意外总是不期而遇（上传失败）");
-                }
+                uploadDone(res)
             },
             /**
              * elem 得到当前触发的元素 DOM 对象。可通过该元素定义的属性值匹配到对应的进度条。
@@ -188,10 +166,9 @@
             , form = layui.form;
         //图片轮播
         carousel.render({
-            elem: '#test10'
+            elem: '#mybanner'
             , width: '778px'
-            , height: '440px'
-            , interval: 5000
+            , interval: 6000
         });
 
         //事件
@@ -222,6 +199,76 @@
     }
 </script>
 
+<!-- 拖拽事件 -->
+<script>
+    layui.$(document).on({
+        dragenter: function (e) {      //拖进
+            e.preventDefault();
+            layui.$('#anywhere-upload').addClass('upload-box--show')
+        },
+        dragleave: function (e) {      //拖离
+            e.preventDefault();
+            btnCloseAction();
+        },
+        dragover: function (e) {       //拖来拖去
+            e.preventDefault();
+        },
+        drop: function (e) {           //拖后放
+            e.preventDefault();
+            let files = e.originalEvent.dataTransfer.files;
+            console.log(files);
+
+            if (files.length == 0) {
+                layer.msg('没有捕获到文件，请重新拖拽');
+                return
+            }
+
+            // 显示文件信息（pannel-fileitem搞一个缺省页）
+            let ymd = getNowFormatDate(files[0].lastModified);
+            let size = (files[0].size / 1000 / 1000).toFixed(2);
+            let html = `
+                    <div class="item-row">文件名：<span>${files[0].name}</span></div>
+                    <div class="item-row">文件大小：<span>${size}M</span></div>
+                    <div class="item-row">文件类型：<span>${files[0].type}</span></div>
+                    <div class="item-row">最后修改时间：<span>${ymd}</span></div>
+                `;
+            layui.$('#pannel-fileitem').html(html);
+            layui.$('#anywhere-upload').addClass('upload-box--show');
+
+            // 调用ajax上传文件
+            var formdata = new FormData();
+            formdata.append('file', files[0]);
+            formdata.append('uid', -1);
+
+            layui.$.ajax({
+                url: 'http://donline.uponup.cn/upload.php',
+                method: 'POST',
+                data: formdata,
+                dataType: 'json',
+                contentType: false,	//设置为 false 是为了避免 JQuery对其操作，从而失去分界符，而使服务器不能正常解析文件
+                processData: false,	//默认为true，默认情况下，发送的数据将被转换为对象，设为false不希望进行转换
+                xhr: function xhr() {
+                    //获取原生的xhr对象
+                    var xhr = layui.$.ajaxSettings.xhr();
+                    if (xhr.upload) {
+                        //添加 progress 事件监听
+                        xhr.upload.addEventListener('progress', function (e) {
+                            //e.loaded 已上传文件字节数
+                            //e.total 文件总字节数
+                            var percentage = parseInt(e.loaded / e.total * 100)
+                            layui.element.progress('pannel-progress', percentage + '%');
+                        }, false);
+                    }
+                    return xhr;
+                },
+                success: function (res) {
+                    uploadDone(res)
+                }
+            })
+        }
+    });
+</script>
+
 <!-- 私有方法 -->
 <script>
     function getNowFormatDate(timestamp) {
@@ -238,6 +285,29 @@
     }
 
 
+    function uploadDone(res) {
+        // 上传结果
+        if (res.ret == 200) {
+            let html = innerHtml(res.data)
+            layui.$('#uploadDemoView').removeClass('layui-hide').find('#file_list').append(html);
+            layer.msg('biu～ 上传成功');
+
+            return
+        }
+
+        // 重置
+        layui.element.progress('pannel-progress', '0%');
+        btnCloseAction();
+        if (res.ret == 100) {
+            layer.msg("☆芞人☆，哼～不要拿空文件調戲我ぷ");
+        } else if (res.ret == 101) {
+            layer.msg("哎呀，服务器接受文件遇到错误：" + res.data[0]);
+        } else if (res.ret == 102) {
+            layer.msg("﹌文件太大啦の，服务器GieGie的 ❤️ 只能装20M");
+        } else {
+            layer.msg("意外总是不期而遇（上传失败）");
+        }
+    }
     function innerHtml(data) {
         var html = '';
         for (const index in data) {
