@@ -30,7 +30,7 @@ $data = [
 ];
 
 // 将记录插入数据库
-$sql = "INSERT INTO files SET name = '$filename', type = '$temp_type', size = $temp_size, path = '/$relative_path'";
+$sql = "INSERT INTO files SET name = '$temp_name', type = '$temp_type', size = $temp_size, path = '/$relative_path'";
 
 $pdo = getPDO();
 $pdo->exec($sql);
